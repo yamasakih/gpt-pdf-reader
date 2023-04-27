@@ -55,8 +55,10 @@ response_language = st.selectbox(
     "Language of response", ("English", "Japanese")
 )
 
-if "index" not in st.session_state:
-    st.session_state["index"] = None
+if "qa" not in st.session_state:
+    st.session_state["qa"] = None
+if "history" not in st.session_state:
+    st.session_state["history"] = None
 
 if openai_api_key:
     st.write("API keys have been set.")
