@@ -1,32 +1,33 @@
-import tempfile
 import base64
+import tempfile
 from pathlib import Path
-from llama_index import download_loader
-import streamlit as st
-from langchain.chat_models import ChatOpenAI
-from llama_index import (
-    QuestionAnswerPrompt,
-    RefinePrompt,
-    GPTSimpleVectorIndex,
-    LLMPredictor,
-    download_loader,
-)
 
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms.loading import load_llm
-from langchain.document_loaders import UnstructuredURLLoader, PyPDFLoader
+import streamlit as st
+from langchain.chains import AnalyzeDocumentChain, RetrievalQA
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains.summarize import load_summarize_chain
-from langchain.chains import AnalyzeDocumentChain
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Chroma
-from langchain.chains import RetrievalQA
+from langchain.document_loaders import PyPDFLoader, UnstructuredURLLoader
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms.loading import load_llm
 from langchain.memory import ChatMessageHistory
-from langchain.vectorstores import FAISS
-from langchain.schema import messages_from_dict, messages_to_dict
 from langchain.retrievers import ContextualCompressionRetriever
-from langchain.retrievers.document_compressors import LLMChainExtractor
-from langchain.retrievers.document_compressors import EmbeddingsFilter
+from langchain.retrievers.document_compressors import (
+    EmbeddingsFilter,
+    LLMChainExtractor,
+)
+from langchain.schema import messages_from_dict, messages_to_dict
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores import FAISS, Chroma
+from llama_index import download_loader
+
+# from langchain.chat_models import ChatOpenAI
+# from llama_index import (
+#     QuestionAnswerPrompt,
+#     RefinePrompt,
+#     GPTSimpleVectorIndex,
+#     LLMPredictor,
+#     download_loader,
+# )
 
 
 def show_pdf(file_path: str):
@@ -41,7 +42,7 @@ def show_pdf(file_path: str):
 
     with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="1000" type="application/pdf">'
+    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="1000" type="application/pdf">'  # noqa: E501
     return pdf_display
 
 
