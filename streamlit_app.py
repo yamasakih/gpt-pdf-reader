@@ -90,9 +90,16 @@ if openai_api_key:
                 embeddings_filter = EmbeddingsFilter(
                     embeddings=embeddings, similarity_threshold=0.76
                 )
-                if not Path("./faiss_index").exists():
+                # if not Path("./faiss_index").exists():
+                #     db = FAISS.from_documents(texts, embeddings)
+                #     db.save_local("faiss_index")
+                with tempfile.NamedTemporaryFile(
+                    delete=False
+                ) as tmp_faiss_index:
+                    db_fp = Path(tmp_faiss_index.name)
                     db = FAISS.from_documents(texts, embeddings)
-                    db.save_local("faiss_index")
+                    db.save_local(str(db_fp))
+
                 docsearch = FAISS.load_local("faiss_index", embeddings)
                 compression_retriever = ContextualCompressionRetriever(
                     base_compressor=embeddings_filter,
